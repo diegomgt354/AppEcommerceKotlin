@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AppEcommerceKotlin</string>
+    <string name="DescripcionAvatar">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam efficitur ipsum in placerat molestie.  Fusce quis mauris a enim sollicitudin</string>
+
+</resources>
