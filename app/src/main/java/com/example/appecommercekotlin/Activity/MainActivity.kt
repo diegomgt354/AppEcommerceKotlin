@@ -28,10 +28,12 @@ import com.example.appecommercekotlin.db.DbUsuario
 import java.util.Arrays
 import java.util.stream.Collectors
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.OnQueryTextListener {
 
     private var adapterPopular: RecyclerView.Adapter<*>? = null
     private var adapterPopularlicores: RecyclerView.Adapter<*>? = null
+
+    private var adapterSearch: SearchAdapter? = null
 
     private var recyclerViewPopular: RecyclerView? = null
     private var recyclerViewPopularLicores: RecyclerView? = null
@@ -82,7 +84,7 @@ class MainActivity : AppCompatActivity() {
             ).show()
         }
 
-        Toast.makeText(this, CartActivity.Carrito.cantidad.toString(), Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, CartActivity.Carrito.cantidad.toString(), Toast.LENGTH_SHORT).show()
     }
 
     private fun initView() {
@@ -161,27 +163,11 @@ class MainActivity : AppCompatActivity() {
             txtUsuarioMain!!.text = "Inicia Sesión"
         }
 
+        txtBuscardor?.setOnQueryTextListener(this)
 
-        txtBuscardor?.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
-            androidx.appcompat.widget.SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText!!.length > 0) {
-                    recyclerViewBuscador!!.isVisible  =  true
-                    body!!.isGone = true
-                } else {
-                    body!!.isVisible  =  true
-                    recyclerViewBuscador!!.isGone = true
-                }
-                recyclerViewBuscador!!.invalidate() // Actualiza la vista para mostrar el cambio de visibilidad
-                return false
-            }
-        })
 
     }
+
 
     private fun initRecyclerViewSearch() {
         var description =
@@ -201,16 +187,40 @@ class MainActivity : AppCompatActivity() {
 
         recyclerViewBuscador!!.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        adapterPopular = SearchAdapter(items)
-        recyclerViewBuscador!!.adapter = adapterPopular
+        adapterSearch = SearchAdapter(items)
+        recyclerViewBuscador!!.adapter = adapterSearch
+
+        /*
+        txtBuscardor?.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText!!.length > 0) {
+                    recyclerViewBuscador!!.isVisible  =  true
+                    body!!.isGone = true
+
+                } else {
+                    body!!.isVisible  =  true
+                    recyclerViewBuscador!!.isGone = true
+                }
+                recyclerViewBuscador!!.invalidate() // Actualiza la vista para mostrar el cambio de visibilidad
+                return false
+            }
+        })
+
+         */
 
     }
 
     private fun initRecyclerView() {
-        var description =
-            "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen. No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documentos electrónicos, quedando esencialmente igual al original. Fue popularizado en los 60s con la creación de las hojas \"Letraset\", las cuales contenian pasajes de Lorem Ipsum, y más recientemente con software de autoedición, como por ejemplo Aldus PageMaker, el cual incluye versiones de Lorem Ipsum."
+        var description =  "Esto es una descripcion"
         var tempList = Arrays.asList(
-            PopularDomain("Red Label", description, "red_label", 15, 4.0, 58.9),
+            PopularDomain("Red Label",
+                "whisky escocés de alta calidad, apreciado por su sabor equilibrado y suavidad, así como por su distintiva etiqueta roja y su lema inspirador"
+                , "red_label", 15, 4.0, 58.9),
             PopularDomain("Jagger", description, "jagger", 10, 3.0, 99.0),
             PopularDomain("Fourloko", description, "four", 12, 3.0, 11.0),
             PopularDomain("Pilsen", description, "pilsen", 8, 4.5, 48.0)
@@ -235,4 +245,35 @@ class MainActivity : AppCompatActivity() {
         adapterPopularlicores = PopularAdapter(itemsLicores)
         recyclerViewPopularLicores!!.adapter = adapterPopularlicores
     }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        return false
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+
+        /*Toast.makeText(
+            this,
+            newText,
+            Toast.LENGTH_SHORT
+        ).show()
+         */
+
+        if (newText!!.length > 0) {
+            recyclerViewBuscador!!.isVisible  =  true
+            body!!.isGone = true
+
+        } else {
+            body!!.isVisible  =  true
+            recyclerViewBuscador!!.isGone = true
+        }
+        recyclerViewBuscador!!.invalidate() // Actualiza la vista para mostrar el cambio de visibilidad
+
+        if (newText != null) {
+            adapterSearch?.filtrado(newText, this)
+        }
+        return false
+    }
+
+
 }

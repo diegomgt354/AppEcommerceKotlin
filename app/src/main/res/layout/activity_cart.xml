@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
     tools:context=".Activity.CartActivity">
 
     <ScrollView
@@ -241,9 +242,8 @@
             <LinearLayout
                 android:id="@+id/direccion_expand"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="400dp"
                 android:background="@color/orange"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/view5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -251,11 +251,81 @@
                 app:layout_constraintBottom_toTopOf="@+id/view5"
                 tools:ignore="MissingConstraints">
 
-                <TextView
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:text="mensaje de prueba" />
+                    android:background="@drawable/white_background">
+
+                    <TextView
+                        android:id="@+id/textView130"
+                        style="@style/textStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Latitud"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/txtLatitud"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:text="0.0"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView130"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView170"
+                        style="@style/textStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Longitud"
+                        app:layout_constraintBottom_toTopOf="@+id/view44"
+                        app:layout_constraintStart_toStartOf="@+id/textView130"
+                        app:layout_constraintTop_toBottomOf="@+id/textView130" />
+
+                    <TextView
+                        android:id="@+id/txtLongitud"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="0.0"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toTopOf="@+id/view44"
+                        app:layout_constraintEnd_toEndOf="@+id/txtLatitud"
+                        app:layout_constraintTop_toBottomOf="@+id/txtLatitud" />
+
+                    <View
+                        android:id="@+id/view44"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="20dp"
+                        android:background="#ABABAB"
+                        app:layout_constraintTop_toBottomOf="@+id/textView170"
+                        tools:layout_editor_absoluteX="16dp" />
+
+
+                    <fragment
+                        android:id="@+id/map"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        app:layout_constraintTop_toBottomOf="@+id/view44"
+                        android:layout_marginTop="20dp"
+                        map:cameraZoom="10"
+                        map:uiRotateGestures="true"
+                        map:uiZoomControls="true" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
             </LinearLayout>
 
@@ -298,7 +368,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Dinero"
+                    android:text="Finalizar con  el Pago"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/grey_80" />
 
@@ -317,40 +387,133 @@
 
             </LinearLayout>
 
-
+            <!--android:visibility="gone" -->
             <LinearLayout
                 android:id="@+id/metodo_expand"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/orange"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/view5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_direccion_carrito"
                 app:layout_constraintBottom_toTopOf="@+id/view5">
 
-
-                <TextView
+                <!--
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/pedirAhoraBtn"
+                    style="@android:style/Widget.Button"
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:layout_margin="15dp"
-                    android:text="mensaje de prueba" />
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:background="@drawable/green_btn"
+                    android:text="PAGAR AHORA"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+                    -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    android:visibility="visible">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/pedirAhoraBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        app:cardCornerRadius="2dp"
+                        app:cardElevation="2dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="200dp">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/pago_tarjeta" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginStart="15dp"
+                                    android:layout_marginTop="15dp"
+                                    android:layout_marginEnd="15dp"
+                                    android:layout_marginBottom="15dp"
+                                    android:textAlignment="center"
+                                    android:text="Tarjeta"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                                    android:textColor="@android:color/black" />
+
+                            </RelativeLayout>
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/btnEfectivo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        app:cardCornerRadius="2dp"
+                        app:cardElevation="2dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="200dp">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/pago_efectivo" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginStart="15dp"
+                                    android:layout_marginTop="15dp"
+                                    android:layout_marginEnd="15dp"
+                                    android:layout_marginBottom="15dp"
+                                    android:textAlignment="center"
+                                    android:text="Efectivo"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                                    android:textColor="@android:color/black" />
+
+                            </RelativeLayout>
+
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
 
             </LinearLayout>
 
             <!--expands-->
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/pedirAhoraBtn"
-                style="@android:style/Widget.Button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:background="@drawable/green_btn"
-                android:text="PAGAR AHORA"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
+
 
         </LinearLayout>
     </ScrollView>

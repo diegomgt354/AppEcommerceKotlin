@@ -2,11 +2,13 @@ package com.example.appecommercekotlin.Adapter
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.GranularRoundedCorners
@@ -22,8 +24,11 @@ class SearchAdapter (items: ArrayList<PopularDomain>) :
     var items: ArrayList<PopularDomain>
     var context: Context? = null
 
+    var items_filter: ArrayList<PopularDomain>
+
     init {
         this.items = items
+        this.items_filter = ArrayList(items)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchAdapter.Viewholder {
@@ -65,6 +70,36 @@ class SearchAdapter (items: ArrayList<PopularDomain>) :
             titleTxt = itemView.findViewById(R.id.titleTxt)
             picture = itemView.findViewById(R.id.picture)
         }
+    }
+
+
+    fun filtrado(text : String, context: Context){
+
+
+        var  longitud = text.length
+        if (longitud ==  0){
+            items.clear()
+            items.addAll(items_filter)
+        }else{
+            val collection: List<PopularDomain> =
+                items.filter { it.getTitle().toString().toLowerCase().contains(text.toLowerCase()) }
+
+
+            items.clear()
+            items.addAll(collection)
+
+            /*
+            items_filter.stream().forEach { v ->
+                Toast.makeText(
+                    context,
+                    v.getTitle(),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+             */
+        }
+        notifyDataSetChanged()
     }
 
 }

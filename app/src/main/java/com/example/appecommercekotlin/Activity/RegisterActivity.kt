@@ -8,13 +8,15 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
 import com.example.appecommercekotlin.Entity.Usuario
 import com.example.appecommercekotlin.R
 import com.example.appecommercekotlin.db.DbUsuario
+import com.google.android.material.textfield.TextInputEditText
 
 class RegisterActivity : AppCompatActivity() {
 
-    private var correo_registro: EditText? = null
+    private var correo_registro: TextInputEditText? = null
     private var usuario_registro:EditText? = null
     private var password_registro:EditText? = null
     private var nombre_registro:EditText? = null
@@ -33,6 +35,23 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun bottonNavigation() {
+
+        correo_registro!!.doAfterTextChanged { text ->
+            if (!isValidEmail(text.toString())) {
+                correo_registro!!.error = "Formato de correo es incorrecto"
+            }else{
+                correo_registro!!.error = null
+            }
+        }
+
+        edad_registro!!.doAfterTextChanged { text ->
+            if (text!!.isNotEmpty() && text!!.toString().toInt() > 100) {
+                edad_registro!!.error = "La edad no puede ser mayor a 100 años"
+            } else {
+                edad_registro!!.error = null
+            }
+        }
+
         sign_in!!.setOnClickListener { view: View? ->
             startActivity(
                 Intent(
@@ -52,29 +71,33 @@ class RegisterActivity : AppCompatActivity() {
                         break
                     }
                 }
-                if (validacion) {
-                    val id: Long = dbUsuario.guardar(
-                        correo_registro!!.text.toString(),
-                        usuario_registro!!.text.toString(),
-                        password_registro!!.text.toString(),
-                        nombre_registro!!.text.toString(), edad_registro!!.text.toString().toInt(),
-                        genero_registro!!.text.toString(),
-                        direccion_registro!!.text.toString()
-                    )
-                    if (id != 0L) {
-                        Toast.makeText(this@RegisterActivity, "Usuario creado", Toast.LENGTH_SHORT)
-                            .show()
-                        val intent = Intent(this@RegisterActivity, MainActivity::class.java)
-                        startActivity(intent)
+
+                if(edad_registro!!.error == null && correo_registro!!.error == null){
+                    if (validacion) {
+                        val id: Long = dbUsuario.guardar(
+                            correo_registro!!.text.toString(),
+                            usuario_registro!!.text.toString(),
+                            password_registro!!.text.toString(),
+                            nombre_registro!!.text.toString(), edad_registro!!.text.toString().toInt(),
+                            genero_registro!!.text.toString(),
+                            direccion_registro!!.text.toString()
+                        )
+                        if (id != 0L) {
+                            Toast.makeText(this@RegisterActivity, "Usuario creado", Toast.LENGTH_SHORT)
+                                .show()
+                            val intent = Intent(this@RegisterActivity, MainActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            Toast.makeText(
+                                this@RegisterActivity, "Error al crear usuario", Toast.LENGTH_SHORT).show()
+                        }
                     } else {
                         Toast.makeText(
-                            this@RegisterActivity, "Error al crear usuario", Toast.LENGTH_SHORT).show()
+                            this@RegisterActivity, "Correo electronico ya registrado", Toast.LENGTH_SHORT).show()
+                        correo_registro!!.requestFocus()
                     }
-                } else {
-                    Toast.makeText(
-                        this@RegisterActivity, "Correo electronico ya registrado", Toast.LENGTH_SHORT).show()
-                    correo_registro!!.requestFocus()
                 }
+
             } catch (ex: Exception) {
                 Toast.makeText(
                     this@RegisterActivity,
@@ -96,5 +119,10 @@ class RegisterActivity : AppCompatActivity() {
         genero_registro = findViewById(R.id.genero_registro)
         btnRegistrar = findViewById(R.id.btnRegistrar)
         sign_in = findViewById(R.id.sign_in)
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        val emailPattern = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}"
+        return Regex(emailPattern).matches(email)
     }
 }

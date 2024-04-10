@@ -52,5 +52,8 @@ dependencies {
     // en su representación JSON. También se puede utilizar para convertir una cadena JSON en un objeto Java equivalente.
     implementation("com.google.code.gson:gson:2.10.1")
 
+    // mapas google en Android
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+
 
 }

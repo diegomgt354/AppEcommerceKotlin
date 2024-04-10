@@ -10,6 +10,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,10 +21,17 @@ import com.example.appecommercekotlin.Helper.ChangeNumberItemsListener
 import com.example.appecommercekotlin.Helper.ManagmentCart
 import com.example.appecommercekotlin.R
 import com.example.appecommercekotlin.db.DbUsuario
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import java.io.Serializable
 import java.util.stream.Collectors
 
-class CartActivity : AppCompatActivity() {
+class CartActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener,
+    GoogleMap.OnMapLongClickListener {
 
     private var adapter: RecyclerView.Adapter<*>? = null
     private var recyclerView: RecyclerView? = null
@@ -33,7 +41,8 @@ class CartActivity : AppCompatActivity() {
     private var taxTxt:TextView? = null
     private var deliveryTxt:TextView? = null
     private var totalTxt:TextView? = null
-    private var pedirAhoraBtn:TextView? = null
+    private var btnEfectivo:CardView? = null
+    private var pedirAhoraBtn:CardView? = null
     private var txt_direccion_carrito:TextView? = null
     private var tax = 0.0
     private var scrollView: ScrollView? = null
@@ -46,6 +55,11 @@ class CartActivity : AppCompatActivity() {
 
     private var metodo_expand : LinearLayout? = null
     private var metodo_btn_expand: ImageButton?=null
+
+    private var txtLatitud : TextView?=null
+    private var txtLongitud : TextView?=null
+    private var mapa : GoogleMap?=null
+    private var mapFrangment:SupportMapFragment?=null
 
     object Carrito {
         var cantidad = 0
@@ -82,7 +96,7 @@ class CartActivity : AppCompatActivity() {
         recyclerView!!.adapter = adapter
 
         Carrito.cantidad = productosCarrito?.size!!
-        Toast.makeText(this, Carrito.cantidad.toString(), Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, Carrito.cantidad.toString(), Toast.LENGTH_SHORT).show()
     }
 
     fun cantidadProductos(): Int {
@@ -158,6 +172,11 @@ class CartActivity : AppCompatActivity() {
             }
         }
 
+        btnEfectivo!!.setOnClickListener { view: View? ->
+            startActivity(Intent(this@CartActivity, MainActivity::class.java))
+            Toast.makeText(this, "Solicitud realizada, pronto tendras tus productos", Toast.LENGTH_SHORT).show()
+        }
+
         direccion_btn_expand!!.setOnClickListener { view :View?->
             if (direccion_expand!!.isVisible){
                 direccion_expand!!.isGone = true
@@ -190,10 +209,35 @@ class CartActivity : AppCompatActivity() {
         backBtn = findViewById(R.id.backBtn)
         scrollView = findViewById(R.id.scrollview3)
         pedirAhoraBtn = findViewById(R.id.pedirAhoraBtn)
+        btnEfectivo = findViewById(R.id.btnEfectivo)
         txt_direccion_carrito = findViewById(R.id.txt_direccion_carrito)
         direccion_btn_expand = findViewById(R.id.direccion_btn_expand)
         metodo_btn_expand = findViewById(R.id.metodo_btn_expand)
         metodo_expand = findViewById(R.id.metodo_expand)
         direccion_expand = findViewById(R.id.direccion_expand)
+
+        txtLatitud = findViewById(R.id.txtLatitud)
+        txtLongitud = findViewById(R.id.txtLongitud)
+        mapFrangment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        mapFrangment!!.getMapAsync(this)
+    }
+
+    override fun onMapReady(p0: GoogleMap) {
+        mapa = p0
+        this.mapa?.setOnMapClickListener(this)
+        this.mapa?.setOnMapLongClickListener(this)
+
+        var peruAte = LatLng(-12.0367484, -76.9326242)
+        mapa!!.addMarker(MarkerOptions().position(peruAte).title("PeruAte"))
+        mapa!!.moveCamera(CameraUpdateFactory.newLatLng(peruAte))
+    }
+    override fun onMapClick(p0: LatLng) {
+        txtLatitud!!.text = ""+ p0.latitude
+        txtLongitud!!.text = ""+ p0.longitude
+    }
+
+    override fun onMapLongClick(p0: LatLng) {
+        txtLatitud!!.text = ""+ p0.latitude
+        txtLongitud!!.text = ""+ p0.longitude
     }
 }
