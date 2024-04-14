@@ -55,5 +55,6 @@ dependencies {
     // mapas google en Android
     implementation("com.google.android.gms:play-services-maps:18.2.0")
 
+    implementation("androidx.activity:activity:1.8.2")
 
 }

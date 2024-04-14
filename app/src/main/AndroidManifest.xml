@@ -12,10 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppEcommerceKotlin"
         tools:targetApi="31">
+        <activity
+            android:name=".Activity.UpdatePasswordActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCWB4Qz-Yvyz0_b7Zj-ufohIAbfkpp1zco"
-            />
+            android:value="AIzaSyCWB4Qz-Yvyz0_b7Zj-ufohIAbfkpp1zco" />
 
         <activity
             android:name=".Activity.MapaActivity"

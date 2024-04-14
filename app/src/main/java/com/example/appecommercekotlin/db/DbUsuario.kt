@@ -47,6 +47,64 @@ class DbUsuario(context: Context?) : DbHelper(context) {
         return id
     }
 
+    fun actualizar(
+        id: Int?,
+        // correo: String?,
+        // usuario: String?,
+        // password: String?,
+        nombre: String?,
+        edad: Int,
+        genero: String?,
+        direccion: String?
+    ): Int {
+        var rowsAffected: Int = 0
+        try {
+            val dbHelper = DbHelper(context)
+            val db = dbHelper.writableDatabase
+            val values = ContentValues()
+            // values.put("correo", correo)
+            // values.put("usuario", usuario)
+            //values.put("password", password)
+            values.put("nombre", nombre)
+            values.put("edad", edad)
+            values.put("genero", genero)
+            values.put("direccion", direccion)
+
+            val whereClause = "id = ?"
+            val args = arrayOf(id.toString())
+
+            rowsAffected = db.update("usuario", values, whereClause, args)
+            db.close()
+
+        } catch (e: Exception) {
+            e.toString()
+        }
+        return rowsAffected
+    }
+
+    fun actualizarPassword(
+        id: Int?,
+        password: String?,
+    ): Int {
+        var rowsAffected: Int = 0
+        try {
+            val dbHelper = DbHelper(context)
+            val db = dbHelper.writableDatabase
+            val values = ContentValues()
+            values.put("password", password)
+
+            val whereClause = "id = ?"
+            val args = arrayOf(id.toString())
+
+            rowsAffected = db.update("usuario", values, whereClause, args)
+            db.close()
+
+        } catch (e: Exception) {
+            e.toString()
+        }
+        return rowsAffected
+    }
+
     // lista a todos los usuarios
     fun listar(): ArrayList<Usuario?> {
         val dbHelper = DbHelper(context)

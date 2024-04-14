@@ -5,14 +5,16 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
-import com.example.appecommercekotlin.Entity.Usuario
 import com.example.appecommercekotlin.R
 import com.example.appecommercekotlin.db.DbUsuario
 import com.google.android.material.textfield.TextInputEditText
+import androidx.activity.result.contract.ActivityResultContracts.*
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -26,6 +28,23 @@ class RegisterActivity : AppCompatActivity() {
     private var sign_in: TextView? = null
     private var btnRegistrar: Button? = null
 
+    //private var btnAddImg: Button? = null
+    //private var imgFoto: ImageView? = null
+
+    /*
+    var pickMedia = registerForActivityResult(PickVisualMedia()){uri->
+        if(uri!=null){
+            imgFoto!!.setImageURI(uri)
+            Toast.makeText(
+                this@RegisterActivity, uri.toString(), Toast.LENGTH_SHORT).show()
+        }else{
+            // imagen no seleccionada
+        }
+    }
+
+     */
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -35,6 +54,10 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun bottonNavigation() {
+
+        //btnAddImg!!.setOnClickListener {
+            //pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
+        //}
 
         correo_registro!!.doAfterTextChanged { text ->
             if (!isValidEmail(text.toString())) {
@@ -78,7 +101,8 @@ class RegisterActivity : AppCompatActivity() {
                             correo_registro!!.text.toString(),
                             usuario_registro!!.text.toString(),
                             password_registro!!.text.toString(),
-                            nombre_registro!!.text.toString(), edad_registro!!.text.toString().toInt(),
+                            nombre_registro!!.text.toString(),
+                            edad_registro!!.text.toString().toInt(),
                             genero_registro!!.text.toString(),
                             direccion_registro!!.text.toString()
                         )
@@ -119,6 +143,8 @@ class RegisterActivity : AppCompatActivity() {
         genero_registro = findViewById(R.id.genero_registro)
         btnRegistrar = findViewById(R.id.btnRegistrar)
         sign_in = findViewById(R.id.sign_in)
+        // btnAddImg = findViewById(R.id.btnAddImg)
+        // imgFoto = findViewById(R.id.imgFoto)
     }
 
     private fun isValidEmail(email: String): Boolean {
